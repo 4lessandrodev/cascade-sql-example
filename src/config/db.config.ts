@@ -53,8 +53,8 @@ export const PostgresDbConfig: TypeOrmModuleOptions = {
 	dropSchema: IS_TESTING,
 	entities: [
 	  !IS_TESTING
-			? join(__dirname, '../**/*.entity.js')
-			: join(__dirname, '../**/*.entity.ts')
+			? join(__dirname, '../**/*.model.js')
+			: join(__dirname, '../**/*.model.ts')
 	],
 
 	migrationsTableName: 'migration',
@@ -91,8 +91,8 @@ export const MysqlDbConfig: TypeOrmModuleOptions = {
 	dropSchema: IS_TESTING,
 	entities: [
 	  !IS_TESTING
-			? join(__dirname, '../**/*.entity.js')
-			: join(__dirname, '../**/*.entity.ts')
+			? join(__dirname, '../**/*.model.js')
+			: join(__dirname, '../**/*.model.ts')
 	],
 
 	migrationsTableName: 'migration',
