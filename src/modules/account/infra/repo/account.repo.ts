@@ -9,33 +9,40 @@ import { Repository } from 'typeorm';
 import { AccountServiceModel } from '../graphql/types/account.type';
 
 @Injectable()
-export class AccountRepo implements IAccountRepo<AccountAggregate, AccountModel> {
+export class AccountRepo
+implements IAccountRepo<AccountAggregate, AccountModel>
+{
 	constructor (
 		@Inject(AccountMapper)
 		private readonly mapper: IMapper<AccountAggregate, AccountModel>,
 
 		@InjectRepository(AccountModel)
-		private readonly accConn: Repository<AccountModel>,
+		private readonly accountConnection: Repository<AccountModel>,
 
 		@InjectRepository(AccountServiceModel)
-		private readonly accSvConn: Repository<AccountServiceModel>
-	) {	}
+		private readonly accountServiceConnection: Repository<AccountServiceModel>
+	) {}
 
 	async save (aggregate: AccountAggregate): Promise<void> {
 		const entity = this.mapper.toPersistence(aggregate);
 
-		await this.accSvConn.delete({ accountId: entity.id });
+		await this.accountServiceConnection.delete({ accountId: entity.id });
 
-		await this.accConn.save(entity);
-	};
+		await this.accountConnection.save(entity);
+	}
 
 	async findMany (ids: string[]): Promise<AccountAggregate[]> {
-		const entities = await this.accConn.createQueryBuilder().whereInIds(ids).execute();
+		const entities = await this.accountConnection.findByIds(ids);
 		return entities.map((entity) => this.mapper.toDomain(entity));
-	};
+	}
 
-	async findOne (filter: Filter<Partial<AccountModel>>): Promise<AccountAggregate | null> {
-		const entity = await this.accConn.findOne({ ...filter, relations: ['accountService'] });
+	async findOne (
+		filter: Filter<Partial<AccountModel>>
+	): Promise<AccountAggregate | null> {
+		const entity = await this.accountConnection.findOne({
+			...filter,
+			relations: ['accountService']
+		});
 		if (!entity) {
 			return null;
 		}
@@ -44,9 +51,11 @@ export class AccountRepo implements IAccountRepo<AccountAggregate, AccountModel>
 	}
 
 	async findAsModel (): Promise<AccountModel[]> {
-		const models = await this.accConn.find({ relations: ['accountService'] });
+		const models = await this.accountConnection.find({
+			relations: ['accountService']
+		});
 		return models;
-	};
+	}
 }
 
 export default AccountRepo;

@@ -15,25 +15,25 @@ export class ServiceRepo implements IServiceRepo<ServiceAggregate, ServiceModel>
 		private readonly mapper: IMapper<ServiceAggregate, ServiceModel>,
 
 		@InjectRepository(ServiceModel)
-		private readonly srvConn: Repository<ServiceModel>,
+		private readonly serviceConnection: Repository<ServiceModel>,
 
 		@InjectRepository(AccountServiceModel)
-		private readonly accSvrConn: Repository<AccountServiceModel>
+		private readonly accountServiceConnection: Repository<AccountServiceModel>
 	) {	}
 
 	async save (aggregate: ServiceAggregate): Promise<void> {
 		const entity = this.mapper.toPersistence(aggregate);
 
-		await this.srvConn.save(entity);
+		await this.serviceConnection.save(entity);
 	};
 
 	async findMany (ids: string[]): Promise<ServiceAggregate[]> {
-		const entities = await this.srvConn.findByIds(ids);
+		const entities = await this.serviceConnection.findByIds(ids);
 		return entities.map((entity) => this.mapper.toDomain(entity));
 	};
 
 	async findOne (filter: Filter<Partial<ServiceModel>>): Promise<ServiceAggregate|null> {
-		const entity = await this.srvConn.findOne(filter);
+		const entity = await this.serviceConnection.findOne(filter);
 		if (!entity) {
 			return null;
 		}
@@ -42,15 +42,15 @@ export class ServiceRepo implements IServiceRepo<ServiceAggregate, ServiceModel>
 
 	async findAsModel (ids?: string[]): Promise<ServiceModel[]> {
 		if (ids?.length) {
-			return await this.srvConn.findByIds(ids);
+			return await this.serviceConnection.findByIds(ids);
 		}
-		return await this.srvConn.find();
+		return await this.serviceConnection.find();
 	};
 
 	async findAsByAccountIdModel (accountId: string): Promise<ServiceModel[]> {
-		const accSrvs = await this.accSvrConn.find({ where: { accountId } });
+		const accSrvs = await this.accountServiceConnection.find({ where: { accountId } });
 		const ids = accSrvs.map((accSv) => accSv.serviceId);
-		const services = this.srvConn.findByIds(ids);
+		const services = this.serviceConnection.findByIds(ids);
 		return services as unknown as ServiceModel[];
 	};
 }

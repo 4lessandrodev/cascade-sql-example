@@ -7,7 +7,7 @@ import { Result } from 'types-ddd';
 import UpdateAccountUseCase from './application/use-cases/update-account.use-case';
 import CreateUpdateAccountDto from './application/use-cases/update-account.dto';
 import GetAccountUseCase from './application/use-cases/get-account.use-case';
-import GetServiceByAccountIdUseCase from './application/use-cases/get-service-by-account-id.use-case';
+import GetServiceByAccountIdUseCase from '../service/application/use-cases/get-service-by-account-id.use-case';
 import ServiceModel from '../service/infra/models/service.model';
 
 @Injectable()
