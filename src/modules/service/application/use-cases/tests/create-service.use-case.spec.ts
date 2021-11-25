@@ -11,7 +11,8 @@ describe('create-service.use-case', () => {
 			save: jest.fn(),
 			findMany: jest.fn(),
 			findAsModel: jest.fn(),
-			findOne: jest.fn()
+			findOne: jest.fn(),
+			findAsByAccountIdModel: jest.fn()
 		};
 	});
 

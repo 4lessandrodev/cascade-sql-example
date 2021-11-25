@@ -22,7 +22,8 @@ describe('create-update-account.use-case', () => {
 			findAsModel: jest.fn(),
 			findMany: jest.fn(),
 			findOne: jest.fn(),
-			save: jest.fn()
+			save: jest.fn(),
+			findAsByAccountIdModel: jest.fn()
 		};
 	});
 
