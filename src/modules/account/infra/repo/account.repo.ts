@@ -6,6 +6,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import AccountMapper from '../mappers/account.mapper';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { AccountServiceModel } from '../graphql/types/account.type';
 
 @Injectable()
 export class AccountRepo implements IAccountRepo<AccountAggregate, AccountModel> {
@@ -14,29 +15,37 @@ export class AccountRepo implements IAccountRepo<AccountAggregate, AccountModel>
 		private readonly mapper: IMapper<AccountAggregate, AccountModel>,
 
 		@InjectRepository(AccountModel)
-		private readonly conn: Repository<AccountModel>
+		private readonly accConn: Repository<AccountModel>,
+
+		@InjectRepository(AccountServiceModel)
+		private readonly accSvConn: Repository<AccountServiceModel>
 	) {	}
 
 	async save (aggregate: AccountAggregate): Promise<void> {
 		const entity = this.mapper.toPersistence(aggregate);
-		await this.conn.save(entity);
+
+		await this.accSvConn.delete({ accountId: entity.id });
+
+		await this.accConn.save(entity);
 	};
 
-	async findMany (filter: Filter<Partial<AccountModel>>): Promise<AccountAggregate[]> {
-		const entities = await this.conn.find(filter);
+	async findMany (ids: string[]): Promise<AccountAggregate[]> {
+		const entities = await this.accConn.createQueryBuilder().whereInIds(ids).execute();
 		return entities.map((entity) => this.mapper.toDomain(entity));
 	};
 
-	async findOne (filter: Filter<Partial<AccountModel>>): Promise<AccountAggregate|null> {
-		const entity = await this.conn.findOne(filter);
+	async findOne (filter: Filter<Partial<AccountModel>>): Promise<AccountAggregate | null> {
+		const entity = await this.accConn.findOne({ ...filter, relations: ['accountService'] });
 		if (!entity) {
 			return null;
 		}
+
 		return this.mapper.toDomain(entity);
 	}
 
-	async findAsModel (filter: Filter<Partial<AccountModel>>): Promise<AccountModel[]> {
-		return await this.conn.find(filter);
+	async findAsModel (): Promise<AccountModel[]> {
+		const models = await this.accConn.find({ relations: ['accountService'] });
+		return models;
 	};
 }
 

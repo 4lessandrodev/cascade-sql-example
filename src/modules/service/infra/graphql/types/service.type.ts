@@ -1,12 +1,18 @@
-import { Field, Int, ObjectType } from '@nestjs/graphql';
+import { Field, ID, ObjectType } from '@nestjs/graphql';
 
 @ObjectType()
 export class ServiceType {
-	@Field(() => Int)
-	id!: number;
+	@Field(() => ID)
+	id!: string;
 
 	@Field(() => String)
-	name!: string;
+    name!: string;
+
+	@Field(() => Date)
+    createdAt!: Date;
+
+	@Field(() => Date)
+    updatedAt!: Date;
 }
 
 export default ServiceType;

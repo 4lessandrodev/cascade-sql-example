@@ -4,22 +4,24 @@ import CreateServiceUseCase from '@modules/service/application/use-cases/create-
 import CreateServiceDto from '@modules/service/application/use-cases/create-service.dto';
 import HandlerErrorOnFailure from '@shared/result-error-handler/result-error-handler';
 import { Result } from 'types-ddd';
+import GetServiceUseCase from './application/use-cases/get-service.use-case';
 
 @Injectable()
 export class ServiceService {
-	private readonly service: ServiceModel[] = [];
-
 	constructor (
 		@Inject(CreateServiceUseCase)
-		private readonly createServiceUseCase: CreateServiceUseCase
+		private readonly createServiceUseCase: CreateServiceUseCase,
+
+		@Inject(GetServiceUseCase)
+		private readonly getServicesUseCase: GetServiceUseCase
 	) {}
 
 	async create (dto: CreateServiceDto): Promise<Result<void>> {
 		return HandlerErrorOnFailure(await this.createServiceUseCase.execute(dto));
 	}
 
-	findAll (): ServiceModel[] {
-		return this.service;
+	async findAll (): Promise<ServiceModel[]> {
+		return (await this.getServicesUseCase.execute()).getResult();
 	}
 }
 

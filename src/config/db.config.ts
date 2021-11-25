@@ -58,7 +58,6 @@ export const PostgresDbConfig: TypeOrmModuleOptions = {
 	],
 
 	migrationsTableName: 'migration',
-
 	migrations: [
 	  !IS_TESTING
 			? join(__dirname, 'migration/*.js')
@@ -87,7 +86,7 @@ export const MysqlDbConfig: TypeOrmModuleOptions = {
 	username: MYSQL_USER,
 	password: MYSQL_PASSWORD,
 	database: DB_NAME,
-	synchronize: !IS_PRODUCTION,
+	synchronize: true,
 	dropSchema: IS_TESTING,
 	entities: [
 	  !IS_TESTING
@@ -96,7 +95,7 @@ export const MysqlDbConfig: TypeOrmModuleOptions = {
 	],
 
 	migrationsTableName: 'migration',
-
+	logging: true,
 	migrations: [
 	  !IS_TESTING
 			? join(__dirname, 'migration/*.js')

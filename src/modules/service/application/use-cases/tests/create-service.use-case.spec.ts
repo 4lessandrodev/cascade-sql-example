@@ -9,7 +9,9 @@ describe('create-service.use-case', () => {
 	beforeEach(() => {
 		repo = {
 			save: jest.fn(),
-			findMany: jest.fn()
+			findMany: jest.fn(),
+			findAsModel: jest.fn(),
+			findOne: jest.fn()
 		};
 	});
 

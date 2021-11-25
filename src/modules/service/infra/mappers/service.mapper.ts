@@ -1,5 +1,6 @@
 import ServiceAggregate from '@modules/service/domain/aggregates/service.aggregate';
 import ServiceModel from '@modules/service/infra/models/service.model';
+import { Injectable } from '@nestjs/common';
 import { IMapper, DomainId, Result } from 'types-ddd';
 
 export const ServiceAggregateFactory = (model: ServiceModel): Result<ServiceAggregate> => {
@@ -22,6 +23,7 @@ export const ServiceModelFactory = (aggregate: ServiceAggregate): ServiceModel =
 	};
 };
 
+@Injectable()
 export class ServiceMapper implements IMapper<ServiceAggregate, ServiceModel> {
 	toDomain (model: ServiceModel) {
 		return ServiceAggregateFactory(model).getResult();

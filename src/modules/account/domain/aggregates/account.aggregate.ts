@@ -18,6 +18,14 @@ export class AccountAggregate extends AggregateRoot<AccountAggregateProps> {
 		return this.props.servicesId;
 	}
 
+	changeServices (services: string[]): void {
+		this.props.servicesId = services;
+	}
+
+	changeName (name: string): void {
+		this.props.name = name;
+	}
+
 	public static create (props: AccountAggregateProps): Result<AccountAggregate> {
 		return Result.ok(new AccountAggregate(props));
 	}

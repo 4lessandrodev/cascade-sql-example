@@ -3,9 +3,14 @@ import CreateServiceDto from './create-service.dto';
 import IServiceRepo from '@modules/service/domain/repo/service.repo';
 import ServiceAggregate from '@modules/service/domain/aggregates/service.aggregate';
 import ServiceModel from '@modules/service/infra/models/service.model';
+import { Inject, Injectable } from '@nestjs/common';
 
+@Injectable()
 export class CreateServiceUseCase implements IUseCase<CreateServiceDto, Result<void, string>> {
-	constructor (private readonly serviceRepo: IServiceRepo<ServiceAggregate, ServiceModel>) {}
+	constructor (
+		@Inject('ServiceRepository')
+		private readonly serviceRepo: IServiceRepo<ServiceAggregate, ServiceModel>
+	) { }
 
 	async execute (dto: CreateServiceDto): Promise<Result<void, string>> {
 		try {

@@ -36,7 +36,7 @@ module.exports = {
     "@typescript-eslint/brace-style": "off",
     "space-before-function-paren": ["error", "always"],
     "@typescript-eslint/no-explicit-any": "off",
-    "@typescript-eslint/triple-slash-reference": "off"
+    "@typescript-eslint/triple-slash-reference": "off",
+    "no-mixed-spaces-and-tabs": ["error", "smart-tabs"]
   },
 };
-

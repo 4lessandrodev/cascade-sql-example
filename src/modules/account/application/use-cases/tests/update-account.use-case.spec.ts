@@ -1,7 +1,7 @@
-import CreateAccountUseCase from '@modules/account/application/use-cases/create-account.use-case';
 import IAccountRepo from '@modules/account/domain/repo/account.repo';
 import AccountAggregate from '@modules/account/domain/aggregates/account.aggregate';
 import AccountModel from '@modules/account/infra/models/account.model';
+import UpdateAccountUseCase from '@modules/account/application/use-cases/update-account.use-case';
 import ServiceAggregate from '@modules/service/domain/aggregates/service.aggregate';
 import ServiceModel from '@modules/service/infra/models/service.model';
 import IServiceRepo from '@modules/service/domain/repo/service.repo';
@@ -27,7 +27,7 @@ describe('create-update-account.use-case', () => {
 	});
 
 	it('should be defined', () => {
-		const useCase = new CreateAccountUseCase(repo, repo2);
+		const useCase = new UpdateAccountUseCase(repo, repo2);
 		expect(useCase).toBeDefined();
 	});
 });

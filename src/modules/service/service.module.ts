@@ -6,19 +6,27 @@ import ServiceRepo from '@modules/service/infra/repo/service.repo';
 import ServiceMapper from '@modules/service/infra/mappers/service.mapper';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import ServiceModel from './infra/models/service.model';
+import GetServiceUseCase from './application/use-cases/get-service.use-case';
+import AccountServiceModel from './infra/models/account-service.model';
 
 @Module({
-	imports: [TypeOrmModule.forFeature([ServiceModel])],
+	imports: [
+		TypeOrmModule.forFeature([ServiceModel, AccountServiceModel])
+	],
 	providers: [
-		ServiceMapper,
-		ServiceRepo,
-		CreateServiceUseCase,
 		ServiceService,
+		{
+			provide: 'ServiceRepository',
+			useClass: ServiceRepo
+		},
+		CreateServiceUseCase,
+		GetServiceUseCase,
+		ServiceMapper,
 		ServiceResolver
 	],
 	exports: [
-		ServiceMapper,
-		ServiceRepo
+		'ServiceRepository',
+		ServiceMapper
 	]
 })
 export class ServiceModule {}

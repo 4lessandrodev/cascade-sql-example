@@ -1,20 +1,20 @@
-import { Entity, CreateDateColumn, UpdateDateColumn, ManyToOne, Column } from 'typeorm';
+import { Entity, CreateDateColumn, UpdateDateColumn, ManyToOne, PrimaryColumn } from 'typeorm';
 import ServiceModel from '@modules/service/infra/models/service.model';
 import AccountModel from './account.model';
 
 @Entity({ name: 'accounts_service' })
 export class AccountServiceModel {
-    @Column({ type: 'uuid' })
+    @PrimaryColumn({ type: 'uuid' })
     serviceId!: string;
 
-    @Column({ type: 'uuid' })
+    @PrimaryColumn({ type: 'uuid' })
     accountId!: string;
 
     @ManyToOne(() => ServiceModel, as => as.accountService)
     service!: ServiceModel;
 
     @ManyToOne(() => AccountModel, as => as.accountService)
-    account!: AccountServiceModel[];
+    account!: AccountModel;
 
     @CreateDateColumn({ type: 'datetime', nullable: false })
     createdAt!: Date;

@@ -1,7 +1,6 @@
 import { Inject } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import ServiceType from '@modules/service/infra/graphql/types/service.type';
-import GetServiceArgs from '@modules/service/infra/graphql/args/get-service.arg';
 import ServiceService from '@modules/service/service.service';
 import CreateServiceInput from '@modules/service/infra/graphql/inputs/create-service.input';
 
@@ -20,15 +19,9 @@ export class ServiceResolver {
 		return result.isSuccess;
 	}
 
-	@Query(() => ServiceType)
-	async getService (
-		@Args('input', { type: () => GetServiceArgs }) input: GetServiceArgs
-	): Promise<ServiceType> {
-		console.log('Get', input);
-		return {
-			id: 1,
-			name: 'some service'
-		};
+	@Query(() => [ServiceType])
+	async getService (): Promise<ServiceType[]> {
+		return await this.service.findAll();
 	}
 }
 
